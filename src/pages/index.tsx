@@ -1,8 +1,8 @@
-import { GetStaticProps } from "next";
-import Head from "next/head";
-import { SubscribeButton } from "../components/SubscribeButton";
-import { stripe } from "../services/stripe";
-import styles from "./home.module.scss";
+import { GetStaticProps } from 'next';
+import Head from 'next/head';
+import { SubscribeButton } from '../components/SubscribeButton';
+import { stripe } from '../services/stripe';
+import styles from './home.module.scss';
 
 interface HomeProps {
   product: {
@@ -39,13 +39,13 @@ const Home: React.FC<HomeProps> = ({ product }) => (
 export default Home;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const price = await stripe.prices.retrieve("price_1IY895LStvgj1AIc6qummAqQ");
+  const price = await stripe.prices.retrieve('price_1IY895LStvgj1AIc6qummAqQ');
 
   const product = {
     productId: price.id,
-    amount: new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
+    amount: new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
     }).format(price.unit_amount / 100),
   };
 

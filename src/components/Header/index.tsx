@@ -1,5 +1,5 @@
-import { SignInbutton } from "../SignInButton";
-import styles from "./styles.module.scss";
+import { SignInbutton } from '../SignInButton';
+import styles from './styles.module.scss';
 
 export const Header: React.FC = () => (
   <header className={styles.headerContainer}>
