@@ -14,14 +14,14 @@ type User = {
 };
 
 export default async (
-  request: NextApiRequest,
-  response: NextApiResponse,
+  req: NextApiRequest,
+  res: NextApiResponse,
 ): Promise<void> => {
-  if (request.method !== 'POST') {
-    response.setHeader('Allow', 'POST');
-    return response.status(405).end('Method not allowed');
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).end('Method not allowed');
   }
-  const session = await getSession({ req: request });
+  const session = await getSession({ req });
 
   const user = await fauna.query<User>(
     query.Get(
@@ -61,5 +61,5 @@ export default async (
     cancel_url: process.env.STRIPE_CANCEL_URL,
   });
 
-  return response.status(200).json({ sessionId: stripeCheckoutSession.id });
+  return res.status(200).json({ sessionId: stripeCheckoutSession.id });
 };

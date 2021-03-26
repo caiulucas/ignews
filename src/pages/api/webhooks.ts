@@ -24,16 +24,16 @@ const relevantEvents = new Set([
 ]);
 
 export default async (
-  request: NextApiRequest,
-  response: NextApiResponse,
+  req: NextApiRequest,
+  res: NextApiResponse,
 ): Promise<void> => {
-  if (request.method !== 'POST') {
-    response.setHeader('Allow', 'POST');
-    return response.status(405).end('Method not allowed');
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).end('Method not allowed');
   }
 
-  const buf = await buffer(request);
-  const secret = request.headers['stripe-signature'];
+  const buf = await buffer(req);
+  const secret = req.headers['stripe-signature'];
 
   let event: Stripe.Event;
 
@@ -44,7 +44,7 @@ export default async (
       process.env.STRIPE_WEBHOOK_SECRET,
     );
   } catch (err) {
-    return response.status(400).send(`Webhook error: ${err.message}`);
+    return res.status(400).send(`Webhook error: ${err.message}`);
   }
 
   const { type } = event;
@@ -73,9 +73,9 @@ export default async (
           throw new Error('Unhandled event.');
       }
     } catch (err) {
-      return response.json({ error: 'Webhook handler failed.' });
+      return res.json({ error: 'Webhook handler failed.' });
     }
   }
 
-  return response.json({ received: true });
+  return res.json({ received: true });
 };
