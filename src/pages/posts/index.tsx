@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Prismic from '@prismicio/client';
 
 import { RichText } from 'prismic-dom';
+import Link from 'next/link';
 import { getPrismicClient } from '../../services/prismic';
 import styles from './styles.module.scss';
 
@@ -26,11 +27,13 @@ const Post: React.FC<PostsProps> = ({ posts }) => (
     <main className={styles.container}>
       <div className={styles.posts}>
         {posts.map(post => (
-          <a key={post.slug} href="http://localhost:3000/posts">
-            <time>{post.updatedAt}</time>
-            <strong>{post.title}</strong>
-            <p>{post.excerpt}</p>
-          </a>
+          <Link href={`/posts/preview/${post.slug}`}>
+            <a key={post.slug}>
+              <time>{post.updatedAt}</time>
+              <strong>{post.title}</strong>
+              <p>{post.excerpt}</p>
+            </a>
+          </Link>
         ))}
       </div>
     </main>
@@ -61,7 +64,7 @@ export const getStaticProps: GetStaticProps = async () => {
     ),
   }));
 
-  return { props: { posts } };
+  return { props: { posts }, revalidate: 60 * 60 }; // 1 hour;
 };
 
 export default Post;
